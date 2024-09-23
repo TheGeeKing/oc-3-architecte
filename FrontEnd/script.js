@@ -4,18 +4,29 @@ document.addEventListener(
   function () {
     const portfolio = document.getElementById("portfolio");
     fetch("http://localhost:5678/api/works").then((response) => {
-      console.log(response);
       response.json().then((data) => {
         data.forEach((element) => {
           const portfolioElementToAdd = generatePortfolio({
             src: element.imageUrl,
             alt: element.title,
             caption: element.title,
+            category: element.category.name,
           });
           // add in the portfolio first div
           portfolio
-            .getElementsByTagName("div")[0]
+            .getElementsByClassName("gallery")[0]
             .appendChild(portfolioElementToAdd);
+        });
+      });
+    });
+    const filter = document.getElementById("filter");
+    const filterElement = generateFilters("Tous");
+    filter.appendChild(filterElement);
+    fetch("http://localhost:5678/api/categories").then((response) => {
+      response.json().then((categories) => {
+        categories.forEach((element) => {
+          const filterElement = generateFilters(element.name);
+          filter.appendChild(filterElement);
         });
       });
     });
@@ -25,6 +36,7 @@ document.addEventListener(
 
 function generatePortfolio(element) {
   const portfolioItem = document.createElement("figure");
+  portfolioItem.dataset.category = element.category;
   const portfolioImg = document.createElement("img");
   portfolioImg.src = element.src;
   portfolioImg.alt = element.alt;
@@ -33,4 +45,25 @@ function generatePortfolio(element) {
   portfolioCaption.textContent = element.caption;
   portfolioItem.appendChild(portfolioCaption);
   return portfolioItem;
+}
+
+function generateFilters(element) {
+  const filterElement = document.createElement("button");
+  filterElement.textContent = element;
+  filterElement.dataset.filter = element;
+  filterElement.addEventListener("click", (event) => {
+    const portfolioItems =
+      portfolio.getElementsByClassName("gallery")[0].children;
+    for (let i = 0; i < portfolioItems.length; i++) {
+      if (
+        event.target.dataset.filter === "Tous" ||
+        portfolioItems[i].dataset.category === event.target.dataset.filter
+      ) {
+        portfolioItems[i].style.display = "block";
+      } else {
+        portfolioItems[i].style.display = "none";
+      }
+    }
+  });
+  return filterElement;
 }
