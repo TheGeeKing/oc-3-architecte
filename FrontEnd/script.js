@@ -67,3 +67,22 @@ function generateFilters(element) {
   });
   return filterElement;
 }
+
+function login(username, password) {
+  fetch("http://localhost:5678/api/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email: username, password: password }),
+  }).then((response) => {
+    response.json().then((data) => {
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "index.html";
+      } else {
+        alert("Erreur de connexion");
+      }
+    });
+  });
+}
