@@ -90,9 +90,15 @@ function login(username, password) {
 
 function isLogin() {
   if (!localStorage.getItem("token")) {
+    return;
   }
   const header = document.getElementsByTagName("header")[0];
   header.style.marginTop = "75px";
   const editHeader = document.getElementById("edit-mode");
   editHeader.style.display = "flex";
+  const filter = document.getElementById("filter");
+  filter.style.display = "none";
+  const portfolio = document.getElementById("portfolio");
+  portfolio.getElementsByTagName("div")[0].id = "modify-portfolio";
+  portfolio.getElementsByTagName("span")[0].style.display = "block";
 }

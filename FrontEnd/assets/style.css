@@ -381,3 +381,21 @@ footer nav ul {
 #edit-mode i {
   margin-right: 10px;
 }
+
+/* if span next to h2 is visible, apply this style */
+#modify-portfolio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5em;
+}
+
+#modify-portfolio span {
+  position: absolute;
+  right: 30%;
+  cursor: pointer;
+}
+
+#modify-portfolio h2 {
+  margin-bottom: 0;
+}
