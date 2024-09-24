@@ -399,3 +399,8 @@ footer nav ul {
 #modify-portfolio h2 {
   margin-bottom: 0;
 }
+
+nav a {
+  text-decoration: none;
+  color: black;
+}

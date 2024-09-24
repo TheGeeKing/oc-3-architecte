@@ -101,4 +101,13 @@ function isLogin() {
   const portfolio = document.getElementById("portfolio");
   portfolio.getElementsByTagName("div")[0].id = "modify-portfolio";
   portfolio.getElementsByTagName("span")[0].style.display = "block";
+
+  // replace login by logout and onclick remove token from local storage
+  const login = document.getElementById("login");
+  login.textContent = "logout";
+  login.href = "#";
+  login.onclick = () => {
+    localStorage.removeItem("token");
+    window.location.href = "index.html";
+  };
 }
