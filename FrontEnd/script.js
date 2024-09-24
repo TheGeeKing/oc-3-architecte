@@ -30,6 +30,7 @@ document.addEventListener(
         });
       });
     });
+    isLogin();
   },
   false
 );
@@ -85,4 +86,13 @@ function login(username, password) {
       }
     });
   });
+}
+
+function isLogin() {
+  if (!localStorage.getItem("token")) {
+  }
+  const header = document.getElementsByTagName("header")[0];
+  header.style.marginTop = "75px";
+  const editHeader = document.getElementById("edit-mode");
+  editHeader.style.display = "flex";
 }
