@@ -2,38 +2,60 @@
 document.addEventListener(
   "DOMContentLoaded",
   function () {
-    const portfolio = document.getElementById("portfolio");
-    fetch("http://localhost:5678/api/works").then((response) => {
-      response.json().then((data) => {
-        data.forEach((element) => {
-          const portfolioElementToAdd = generatePortfolio({
-            src: element.imageUrl,
-            alt: element.title,
-            caption: element.title,
-            category: element.category.name,
-          });
-          // add in the portfolio first div
-          portfolio
-            .getElementsByClassName("gallery")[0]
-            .appendChild(portfolioElementToAdd);
-        });
-      });
-    });
-    const filter = document.getElementById("filter");
-    const filterElement = generateFilters("Tous");
-    filter.appendChild(filterElement);
-    fetch("http://localhost:5678/api/categories").then((response) => {
-      response.json().then((categories) => {
-        categories.forEach((element) => {
-          const filterElement = generateFilters(element.name);
-          filter.appendChild(filterElement);
-        });
-      });
-    });
-    isLogin();
+    mainPage();
+    loginPage();
   },
   false
 );
+
+function mainPage() {
+  const portfolio = document.getElementById("portfolio");
+  if (!portfolio) {
+    return;
+  }
+  fetch("http://localhost:5678/api/works").then((response) => {
+    response.json().then((data) => {
+      data.forEach((element) => {
+        const portfolioElementToAdd = generatePortfolio({
+          src: element.imageUrl,
+          alt: element.title,
+          caption: element.title,
+          category: element.category.name,
+        });
+        // add in the portfolio first div
+        portfolio
+          .getElementsByClassName("gallery")[0]
+          .appendChild(portfolioElementToAdd);
+      });
+    });
+  });
+  const filter = document.getElementById("filter");
+  const filterElement = generateFilters("Tous");
+  filter.appendChild(filterElement);
+  fetch("http://localhost:5678/api/categories").then((response) => {
+    response.json().then((categories) => {
+      categories.forEach((element) => {
+        const filterElement = generateFilters(element.name);
+        filter.appendChild(filterElement);
+      });
+    });
+  });
+  isLogin();
+}
+
+function loginPage() {
+  const loginForm = document.getElementById("login-form");
+  if (!loginForm) {
+    return;
+  }
+  // add event listener
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    login(email, password);
+  });
+}
 
 function generatePortfolio(element) {
   const portfolioItem = document.createElement("figure");
@@ -69,13 +91,13 @@ function generateFilters(element) {
   return filterElement;
 }
 
-function login(username, password) {
+function login(email, password) {
   fetch("http://localhost:5678/api/users/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email: username, password: password }),
+    body: JSON.stringify({ email: email, password: password }),
   }).then((response) => {
     response.json().then((data) => {
       if (data.token) {
