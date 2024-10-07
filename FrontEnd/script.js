@@ -132,6 +132,9 @@ function isLogin() {
     localStorage.removeItem("token");
     window.location.href = "index.html";
   };
+  document.getElementById("modifier").addEventListener("click", () => {
+    modalGalerie();
+  });
 }
 
 function getImages() {
