@@ -128,10 +128,10 @@ function isLogin() {
   const login = document.getElementById("login");
   login.textContent = "logout";
   login.href = "#";
-  login.onclick = () => {
+  login.addEventListener("click", () => {
     localStorage.removeItem("token");
     window.location.href = "index.html";
-  };
+  });
   document.getElementById("modifier").addEventListener("click", () => {
     modalGalerie();
   });
@@ -165,9 +165,9 @@ function modalGalerie() {
   const modalClose = document.createElement("button");
   modalClose.innerHTML = "&times;"; // Use innerHTML for HTML entities
   modalClose.className = "close-button";
-  modalClose.onclick = () => {
+  modalClose.addEventListener("click", () => {
     removeModal(modalOverlay); // Close and remove modal when clicking "x"
-  };
+  });
   modalButtons.appendChild(modalClose);
 
   modal.appendChild(modalButtons);
@@ -193,11 +193,11 @@ function modalGalerie() {
     deleteButton.className = "delete-button";
     deleteButton.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
 
-    deleteButton.onclick = () => {
+    deleteButton.addEventListener("click", () => {
       // remove in the modal
       div.remove();
       removeImage(element);
-    };
+    });
 
     const img = document.createElement("img");
     img.src = element;
@@ -216,10 +216,10 @@ function modalGalerie() {
   const addImage = document.createElement("button");
   addImage.textContent = "Ajouter une photo";
   addImage.className = "add-photo-button";
-  addImage.onclick = () => {
+  addImage.addEventListener("click", () => {
     removeModal(modalOverlay);
     modalAddPhoto();
-  };
+  });
   modal.appendChild(addImage);
 
   // Append the modal overlay to the body
@@ -250,18 +250,18 @@ function modalAddPhoto() {
   const modalClose = document.createElement("button");
   modalClose.innerHTML = "&times;"; // Use innerHTML for HTML entities
   modalClose.className = "close-button";
-  modalClose.onclick = () => {
+  modalClose.addEventListener("click", () => {
     removeModal(modalOverlay); // Close and remove modal when clicking "x"
-  };
+  });
 
   const modalBack = document.createElement("button");
   modalBack.innerHTML =
     '<button class="back-button"><i class="fas fa-arrow-left"></i></button>';
   modalBack.className = "back-button";
-  modalBack.onclick = () => {
+  modalBack.addEventListener("click", () => {
     removeModal(modalOverlay); // Close and remove modal when clicking "x"
     modalGalerie();
-  };
+  });
   modalButtons.appendChild(modalBack);
   modalButtons.appendChild(modalClose);
 
@@ -290,7 +290,7 @@ function modalAddPhoto() {
   inputFile.required = true;
   inputFile.style.display = "none";
 
-  inputFile.onchange = (event) => {
+  inputFile.addEventListener("change", (event) => {
     // if there is a file, we display it
     const file = event.target.files[0];
     if (file) {
@@ -299,24 +299,25 @@ function modalAddPhoto() {
         const photo = document.createElement("img");
         photo.src = e.target.result;
 
-        photo.onclick = () => {
+        photo.addEventListener("click", () => {
           inputFile.click();
-        };
+        });
 
         photoUpload.innerHTML = "";
         photoUpload.appendChild(photo);
       };
       reader.readAsDataURL(file);
     }
-  };
+  });
 
   const uploadButton = document.createElement("button");
   uploadButton.textContent = "+ Ajouter photo";
   uploadButton.type = "button";
   uploadButton.className = "upload-button";
-  uploadButton.onclick = () => {
+
+  uploadButton.addEventListener("click", () => {
     inputFile.click();
-  };
+  });
   photoUpload.appendChild(uploadButton);
   const uploadText = document.createElement("p");
   uploadText.innerText = "jpg, png : 4mo max";
@@ -377,13 +378,14 @@ function modalAddPhoto() {
   const addImage = document.createElement("button");
   addImage.textContent = "Valider";
   addImage.className = "validate-photo-button";
-  addImage.onclick = () => {
+
+  addImage.addEventListener("click", () => {
     if (!inputFile.files.length || !input.value || !select.value) {
       return;
     }
     addImageToGallery(inputFile.files[0], input.value, select.value);
     removeModal(modalOverlay);
-  };
+  });
   modal.appendChild(addImage);
 
   // Append the modal overlay to the body
