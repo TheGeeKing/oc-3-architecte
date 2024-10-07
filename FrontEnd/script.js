@@ -386,6 +386,15 @@ function modalAddPhoto() {
     addImageToGallery(inputFile.files[0], input.value, select.value);
     removeModal(modalOverlay);
   });
+
+  form.addEventListener("change", (event) => {
+    if (!inputFile.files.length || !input.value || !select.value) {
+      addImage.classList.remove("validate-photo-button-active");
+      return;
+    }
+    addImage.classList.add("validate-photo-button-active");
+  });
+
   modal.appendChild(addImage);
 
   // Append the modal overlay to the body

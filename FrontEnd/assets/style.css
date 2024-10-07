@@ -557,6 +557,10 @@ nav a {
   font-family: "Syne";
 }
 
+.validate-photo-button-active {
+  background-color: #2c7a7b;
+}
+
 .modal .form {
   align-self: center;
   width: 80%;
