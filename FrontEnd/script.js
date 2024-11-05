@@ -102,6 +102,7 @@ function login(email, password) {
     response.json().then((data) => {
       if (data.token) {
         localStorage.setItem("token", data.token);
+        console.log(data);
         window.location.href = "index.html";
       } else {
         alert("Erreur de connexion");
@@ -142,7 +143,10 @@ function getImages() {
   const portfolioItems =
     portfolio.getElementsByClassName("gallery")[0].children;
   for (let i = 0; i < portfolioItems.length; i++) {
-    images.push(portfolioItems[i].getElementsByTagName("img")[0].src);
+    images.push({
+      src: portfolioItems[i].getElementsByTagName("img")[0].src,
+      id: portfolioItems[i].getElementsByTagName("img")[0].id,
+    });
   }
   return images;
 }
@@ -196,11 +200,19 @@ function modalGalerie() {
     deleteButton.addEventListener("click", () => {
       // remove in the modal
       div.remove();
-      removeImage(element);
+      removeImage(element.src);
+      fetch("http://localhost:5678/api/works/" + element.id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
     });
 
     const img = document.createElement("img");
-    img.src = element;
+    img.src = element.src;
+    img.id = element.id;
     div.appendChild(img);
     div.appendChild(deleteButton);
     photoGrid.appendChild(div);
@@ -232,6 +244,7 @@ function removeImage(image) {
   for (let i = 0; i < portfolioItems.length; i++) {
     if (portfolioItems[i].getElementsByTagName("img")[0].src === image) {
       portfolioItems[i].remove();
+      // return portfolioItems[i].getElementsByTagName("img")[0].id;
       return;
     }
   }
@@ -360,7 +373,7 @@ function modalAddPhoto() {
     response.json().then((categories) => {
       categories.forEach((element) => {
         const option = document.createElement("option");
-        option.value = element.name;
+        option.value = element.id;
         option.text = element.name;
         select.appendChild(option);
       });
@@ -383,8 +396,28 @@ function modalAddPhoto() {
     if (!inputFile.files.length || !input.value || !select.value) {
       return;
     }
-    addImageToGallery(inputFile.files[0], input.value, select.value);
-    removeModal(modalOverlay);
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("title", input.value);
+    formData.append("category", parseInt(select.value, 10));
+    formData.append("image", inputFile.files[0]);
+    formData.append("userId", 1);
+
+    fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      // check if response is ok
+      if (!response.ok) {
+        alert("Failed to add work");
+        return;
+      }
+      // addImageToGallery(inputFile.files[0], input.value, select.value);
+      // removeModal(modalOverlay);
+    });
   });
 
   form.addEventListener("change", (event) => {
