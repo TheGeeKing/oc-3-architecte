@@ -22,7 +22,6 @@ function mainPage() {
           caption: element.title,
           category: element.category.name,
         });
-        // add in the portfolio first div
         portfolio
           .getElementsByClassName("gallery")[0]
           .appendChild(portfolioElementToAdd);
@@ -63,6 +62,7 @@ function generatePortfolio(element) {
   const portfolioImg = document.createElement("img");
   portfolioImg.src = element.src;
   portfolioImg.alt = element.alt;
+  portfolioImg.id = element.id;
   portfolioItem.appendChild(portfolioImg);
   const portfolioCaption = document.createElement("figcaption");
   portfolioCaption.textContent = element.caption;
